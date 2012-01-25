@@ -140,6 +140,7 @@ class ZHash_Password
     * @param string optional $key
     * @return string
     * @access public
+    * @throws RuntimeException - if the hashing process failes
     */
     public function hashKey($key = null)
     {
@@ -154,6 +155,14 @@ class ZHash_Password
 
         $salt = $this->getFullSalt();
         $hash = crypt($key, $salt);
+
+        //check the length of the result hash
+        //to see if the process was succesfull or not
+        if ( strlen($hash) < 13 )
+        {
+            throw new RuntimeException('The hashing process failed');        
+        }
+
         $this->hash = $hash;
 
         return $this;
@@ -240,6 +249,17 @@ class ZHash_Password
         $this->key = $key;
 
         return $this;
+    }
+
+    /**
+    * Get the set key that should be hashed
+    *
+    * @return string
+    * @access public
+    */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
