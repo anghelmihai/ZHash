@@ -161,6 +161,9 @@ class ZHash_Password
 
     /**
     * Set the algorithm to be used for hashing the key
+    * This function will also check if the algorithm is supported;
+    * this is done by checking a constant, for example CRYPT_MD5 if
+    * the algorithm is md5; see the crypt manual page from php.net for more details about these constants
     *
     * @param string $algorithm
     * @return ZHash_Password provides fluent interface
@@ -168,8 +171,13 @@ class ZHash_Password
     */
     public function setAlgorithm($algorithm)
     {
+        $algorithmName = 'CRYPT_' . strtoupper($algorithm);
+        if ( constant($algorithmName) != 1 )
+        {
+            throw new InvalidArgumentException("This algorith is not supported on this machine"); 
+        }
+        
         $this->algorithm = $algorithm;
-
         return $this;
     }
 
