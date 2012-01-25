@@ -401,7 +401,7 @@ class ZHash_Password
     * @return boolean
     * @access public
     */
-    public function checkKey($key, $hash)
+    public static function checkKey($key, $hash)
     {
         return $hash == crypt($key, $hash);
     }
