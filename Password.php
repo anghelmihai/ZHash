@@ -87,7 +87,29 @@ class ZHash_Password
     {
         $strong = false;
 
-        $bytes = openssl_random_pseudo_bytes(30, $strong);
+        switch($this->algorithm)
+        {
+            case 'std_des':
+                $length = 2;
+                break;
+            case 'ext_des':
+                $length = 4;
+                break;
+            case 'md5':
+                $length = 12;
+                break;
+            case 'blowfish':
+                $length = 22;
+                break;
+            case 'sha256':
+                $length = 16;
+                break;
+            case 'sha512':
+                $length = 16;
+                break;
+        }
+
+        $bytes = openssl_random_pseudo_bytes($length, $strong);
 
         if ( !$strong )
         {
