@@ -163,6 +163,7 @@ class ZHash_Password
     * @return string
     * @access public
     * @throws RuntimeException - if the hashing process failes
+	* @throws InvalidArgumentException - if the number if iterations hasn't been set
     */
     public function hashKey($key = null)
     {
@@ -174,6 +175,11 @@ class ZHash_Password
         {
             $this->setKey($key);
         }
+
+		if ( empty($this->iterations) )
+		{
+			throw new InvalidArgumentException('You must provide a value for iterations');
+		}
 
         $salt = $this->getFullSalt();
         $hash = crypt($key, $salt);
@@ -400,6 +406,7 @@ class ZHash_Password
     */
     public static function getIterationsDesFormat($iterations)
     {
+		//des has some weakness if using an even number if iterations
         if ( $iterations % 2 == 0 )
         {
             $iterations--;
